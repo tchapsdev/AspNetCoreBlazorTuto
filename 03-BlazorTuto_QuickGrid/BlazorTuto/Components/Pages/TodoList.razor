@@ -1,0 +1,56 @@
+﻿@page "/todolist"
+@using BlazorTuto.Models
+
+@rendermode InteractiveServer
+
+<PageTitle>Todo Playlist</PageTitle>
+
+<h3>Todo: Youtube playlist</h3>
+
+<div class="">
+    <label>Add a new todo item:</label>
+    <input @bind="newTodoTitle" placeholder="Add new todo" class="form-control" />
+</div>
+<br />
+<div>
+    <button @onclick="AddTodo" class="btn btn-primary">Add</button>
+</div>
+
+<hr />
+<ul>
+    @foreach (var item in todoList)
+    {
+        <li>
+            <input type="checkbox" @bind="item.IsCompleted" />
+
+            <span style="@(item.IsCompleted ? "text-decoration: line-through;" : "")">
+                @item.Title
+            </span>
+        </li>
+    }
+</ul>
+
+@code {
+
+    private string newTodoTitle;
+
+    private List<TodoItem> todoList = [
+        new TodoItem { Id = 1, Title = "Learn Blazor", IsCompleted = false }
+    ];
+
+    private void AddTodo()
+    {
+        if(string.IsNullOrWhiteSpace(newTodoTitle))
+        {
+            return;
+        }
+
+        todoList.Add(new TodoItem
+        {
+            Id = todoList.Count + 1,
+            Title = newTodoTitle,
+            IsCompleted = false
+        });
+        newTodoTitle = string.Empty;
+    }
+}
